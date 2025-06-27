@@ -7,14 +7,14 @@ from datetime import datetime
 video_capture = cv2.VideoCapture(0)
 
 #load known faces
-shano_image = face_recognition.load_image_file("known_faces/shano.jpg")
+shano_image = face_recognition.load_image_file("faces/shano.jpg")
 shano_encoding = face_recognition.face_encodings(shano_image)[0]
 
-ma_image = face_recognition.load_image_file("known_faces/ma.jpg")
-ma_encoding = face_recognition.face_encodings(ma_image)[0]
+mark_image = face_recognition.load_image_file("faces/mark.jpeg")
+mark_encoding = face_recognition.face_encodings(mark_image)[0]
 
-known_face_encodings = [shano_encoding, ma_encoding]
-known_face_names = ["Shano", "Ma"]
+known_face_encodings = [shano_encoding, mark_encoding]
+known_face_names = ["Shano", "Mark"]
 
 #list of expected students
 students = known_face_names.copy()
@@ -24,9 +24,9 @@ face_encodings = []
 
 # get current time
 now = datetime.now()
-current_time = now.strftime("%Y:%m:%d")
+current_date = now.strftime("%Y-%m-%d")
 
-f = open(f"{current_time}.csv", "w+", newline="")
+f = open(f"{current_date}.csv", "w+", newline="")
 lnwriter = csv.writer(f)
 
 while True:
@@ -46,6 +46,26 @@ while True:
         if(matches[best_match_index]):
             name = known_face_names[best_match_index]
 
+        # Add the text if a person is present
+        if name in known_face_names:
+            font = cv2.FONT_HERSHEY_SIMPLEX
+            bottomLeftCornerOfText = (10, 30)
+            fontScale = 1.5
+            fontColor = (255, 0, 0)
+            thickness = 3
+            lineType = 2
+            cv2.putText(frame, name + " Present ", bottomLeftCornerOfText, font, fontScale, fontColor, thickness, lineType)
+            
+            if name in students:
+                students.remove(name)
+                now = datetime.now()
+                current_time = now.strftime("%H-%M-%S")
+                lnwriter.writerow([name, current_time])
+
     cv2.imshow("Attendance", frame)
-    if cv2.waitkey(1) & 0xFF == ord('q'):
+    if cv2.waitKey(1) & 0xFF == ord('q'):
         break
+
+video_capture.release()
+cv2.destroyAllWindows()
+f.close()
