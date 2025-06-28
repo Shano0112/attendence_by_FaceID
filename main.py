@@ -60,7 +60,7 @@ while True:
                 students.remove(name)
                 now = datetime.now()
                 current_time = now.strftime("%H-%M-%S")
-                lnwriter.writerow([name, current_time])
+                lnwriter.writerow([name + " is present at ", current_time])
 
     cv2.imshow("Attendance", frame)
     if cv2.waitKey(1) & 0xFF == ord('q'):
