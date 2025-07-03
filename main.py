@@ -10,11 +10,11 @@ video_capture = cv2.VideoCapture(0)
 shano_image = face_recognition.load_image_file("faces/shano.jpg")
 shano_encoding = face_recognition.face_encodings(shano_image)[0]
 
-mark_image = face_recognition.load_image_file("faces/mark.jpeg")
-mark_encoding = face_recognition.face_encodings(mark_image)[0]
+sanvi_image = face_recognition.load_image_file("faces/sanvi.jpg")
+sanvi_encoding = face_recognition.face_encodings(sanvi_image)[0]
 
-known_face_encodings = [shano_encoding, mark_encoding]
-known_face_names = ["Shano", "Mark"]
+known_face_encodings = [shano_encoding, sanvi_encoding]
+known_face_names = ["Shano", "sanvi"]
 
 #list of expected students
 students = known_face_names.copy()
